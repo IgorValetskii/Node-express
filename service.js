@@ -1,4 +1,5 @@
 const fs = require('fs');
+const shortid = require('shortid');
 class Service {
 
    static getUsers(users){
@@ -13,13 +14,19 @@ class Service {
         return user;
     }
 
-    static addUser(req,res){
-       const user = req.body;
-       const usersNew = fs.writeFile('./usersData.json', JSON.stringify(user), (err => {
-            if(err) return res.status(404);
-            res.send(err);
+    static addUser(req){
+
+        const user = {};
+        user.id = shortid.generate();
+        user.name = req.body.name;
+
+        console.log(user);
+        const usersNew = fs.writeFile('./usersData.json', JSON.stringify(user), (err => {
+            if(err) throw err;
+            // res.status(404);
+            console.log('Записали нового');
         }) );
-       return usersNew;
+        return usersNew;
     }
 }
 

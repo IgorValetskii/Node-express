@@ -12,7 +12,7 @@ class Controller{
         }
 
         addUser(req,res){
-            res.send(service.addUser(req,res));
+            res.send(service.addUser(req));
         }
 
             }
