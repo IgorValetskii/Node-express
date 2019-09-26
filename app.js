@@ -2,7 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 
+const router = require('./router');
+
+
 const app = express();
+
 
 app.use(bodyParser.json());
 
@@ -13,29 +17,7 @@ app.use((req, res, next) => {
     return next();
 });
 
-app.get('/users',  (req, res) => {
-    const users = JSON.parse(fs.readFileSync('./usersData.json', 'utf8'));
-    res.send(users);
-});
-
-app.get('/users/:id',  (req, res) => {
-    const users = JSON.parse(fs.readFileSync('./usersData.json', 'utf8'));
-    const user = users.find(c => c.id === req.params.id);
-    if(!user){
-        res.status(404).send('The user with the given ID was not found')
-    }
-    res.send(user);
-});
-
-app.post('/users',  (req, res) => {
-    const users = JSON.parse(fs.readFileSync('./usersData.json', 'utf8'));
-    const user = {
-        id : users.length + 1,
-        name : req.body.name
-    };
-    const usersNew = fs.writeFileSync('./usersData.json', user );
-    res.send(usersNew);
-});
+app.use( router);
 
 // app.use(require('./router'));
 // app.use(require('./controller'));
@@ -44,4 +26,4 @@ app.listen(3000, function () {
     console.log('Example app listening on port 3000!');
 });
 
-module.exports = app;
+// module.exports = app;

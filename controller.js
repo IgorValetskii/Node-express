@@ -1,19 +1,21 @@
+const service = require('./service');
 class Controller{
-        consctructor(){
-            // this.getUser()
-
+        constructor(users){
+            this.users = users;
+        }
+        getUsers(req, res){
+           res.send(service.getUsers(this.users));
         }
 
-        getUser(){
-            const app1 = require('./app');
-            const fs = require('fs');
-            const bodyParser = require('body-parser');
-            app1.get('/users',  (req, res) => {
-              const users = JSON.parse(fs.readFileSync('./usersData.json', 'utf8'));
-                res.send(users);
-                });
+        getUser(req,res){
+            res.send(service.getUser(req,res,this.users));
+        }
+
+        addUser(req,res){
+            res.send(service.addUser(req,res));
+        }
+
             }
-    };
 
 module.exports = Controller;
 //

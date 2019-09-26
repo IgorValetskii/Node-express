@@ -1,8 +1,1 @@
-[
-  {
-  "name" : "Alex",
-  "id" : "1"
-},
-  {"id": "2",
-  "name" : "Vasya"}
-]
+{"id":null,"name":"vasya"}
