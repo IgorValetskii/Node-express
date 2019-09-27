@@ -1,32 +1,52 @@
 const fs = require('fs');
+const bodyParser = require('body-parser');
 const shortid = require('shortid');
+
 class Service {
-
-   static getUsers(users){
-      return users
+    constructor() {
+        this.users = JSON.parse(fs.readFileSync('./usersData.json', 'utf8'));
     }
 
-    static getUser(req,res,users){
-        const user = users.find(c => c.id === req.params.id);
-        if(!user){
-            res.status(404).send('The user with the given ID was not found')
-        }
-        return user;
+    getAllUsers() {
+        return this.users;
     }
 
-    static addUser(req){
+    // getUser(req, res) {
+    //     const user = this.users.find(c => c.id === req.params.id);
+    //     if (!user) {
+    //         res.status(404).send('The user with the given ID was not found')
+    //     }
+    //     return user;
+    // }
 
+    addUser(req, res) {
+        console.log(req.body);
+        const id = Math.floor (Math.random() * 1000);
         const user = {};
-        user.id = shortid.generate();
+        user.id = id;
+        // user.id = shortid.generate();
         user.name = req.body.name;
 
-        console.log(user);
-        const usersNew = fs.writeFile('./usersData.json', JSON.stringify(user), (err => {
-            if(err) throw err;
-            // res.status(404);
-            console.log('Записали нового');
-        }) );
-        return usersNew;
+        this.users.push(user);
+        this.updateJSONFile(this.users, res);
+    }
+
+    updateUser(req,res){
+
+        this.users.map(el =>{
+            if(el.id === req.body.id) {
+                el.name = req.body.name;
+            }
+        });
+        this.updateJSONFile(this.users,res)
+    }
+
+    updateJSONFile(users, res) {
+        fs.writeFile('./usersData.json', JSON.stringify(users), err => {
+            if (err) return res.status(404).send(err);
+            res.send(users);
+        })
+
     }
 }
 

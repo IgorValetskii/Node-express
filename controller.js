@@ -1,22 +1,25 @@
-const service = require('./service');
-class Controller{
-        constructor(users){
-            this.users = users;
-        }
-        getUsers(req, res){
-           res.send(service.getUsers(this.users));
-        }
+const Service = require('./service');
+const service = new Service();
 
-        getUser(req,res){
-            res.send(service.getUser(req,res,this.users));
-        }
+class Controller {
 
-        addUser(req,res){
-            res.send(service.addUser(req));
-        }
+    getAllUsers(req, res) {
+        res.send(service.getAllUsers());
+    }
 
-            }
+    // getUser(req, res) {
+    //     res.send(service.getUser(req, res));
+    // }
+
+    addUser(req, res) {
+        // console.log(req.body.name);
+        service.addUser(req, res);
+    }
+
+    updateUser(req,res){
+        service.updateUser(req,res);
+    }
+
+}
 
 module.exports = Controller;
-//
-
