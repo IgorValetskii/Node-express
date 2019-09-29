@@ -1,6 +1,5 @@
 const fs = require('fs');
-const bodyParser = require('body-parser');
-const shortid = require('shortid');
+// const shortid = require('shortid');
 
 class Service {
     constructor() {
@@ -11,13 +10,13 @@ class Service {
         return this.users;
     }
 
-    // getUser(req, res) {
-    //     const user = this.users.find(c => c.id === req.params.id);
-    //     if (!user) {
-    //         res.status(404).send('The user with the given ID was not found')
-    //     }
-    //     return user;
-    // }
+    getUser(req, res) {
+        const user = this.users.find(c => c.id === JSON.parse(req.params.id));
+        if (!user) {
+            res.status(404).send('The user with the given ID was not found')
+        }
+        return user;
+    }
 
     addUser(req, res) {
         console.log(req.body);
@@ -29,6 +28,20 @@ class Service {
 
         this.users.push(user);
         this.updateJSONFile(this.users, res);
+    }
+
+    deleteUser(req,res){
+
+        const user = this.users.find(c => c.id === JSON.parse(req.params.id));
+        if(user){
+            const indexOfUser = this.users.findIndex(el => el.id === JSON.parse(req.params.id));
+            this.users.splice(indexOfUser,1);
+            this.updateJSONFile(this.users, res);
+        }
+
+        else{
+            res.status(404).send('The user with the given ID was not found')
+        }
     }
 
     updateUser(req,res){

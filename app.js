@@ -2,9 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const router = require('./router');
+const mongoose = require('mongoose');
 
-// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.json());
 
+// router.use('/users', bodyParser.urlencoded({ extended: false }));
+// router.use('/users', bodyParser.json());
 
 // app.use((req, res, next) => {
 //     res.header("Access-Control-Allow-Origin", "*");
@@ -13,10 +19,7 @@ const router = require('./router');
 //     return next();
 // });
 
-app.use( router);
-
-// app.get('/users', (req, res) => res.send('hui'));
-
+app.use(router);
 
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!');

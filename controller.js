@@ -7,17 +7,20 @@ class Controller {
         res.send(service.getAllUsers());
     }
 
-    // getUser(req, res) {
-    //     res.send(service.getUser(req, res));
-    // }
+    getUser(req, res) {
+        res.send(service.getUser(req, res));
+    }
 
     addUser(req, res) {
-        // console.log(req.body.name);
         service.addUser(req, res);
     }
 
     updateUser(req,res){
         service.updateUser(req,res);
+    }
+
+    deleteUser(req, res){
+        service.deleteUser(req,res)
     }
 
 }
