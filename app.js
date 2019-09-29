@@ -9,6 +9,24 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+app.use(router);
+
+async function start() {
+    try {
+        await mongoose.connect('mongodb+srv://Igor:1q2w3e4r@cluster0-cmtpz.mongodb.net/users', {
+            useNewUrlParser: true,
+            useFindAndModify: false
+        });
+
+        app.listen(3000, function () {
+            console.log('Example app listening on port 3000!');
+        });
+    }catch (e) {
+        console.log(e);
+        
+    }
+}
+
 // router.use('/users', bodyParser.urlencoded({ extended: false }));
 // router.use('/users', bodyParser.json());
 
@@ -19,10 +37,10 @@ app.use(bodyParser.json());
 //     return next();
 // });
 
-app.use(router);
+// app.use(router);
 
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});
+start();
+
+
 
 
