@@ -1,26 +1,39 @@
-const Service = require('./service');
-const service = new Service();
+// const Service = require('./service');
+// const service = new Service();
+
+const ServiceMongo = require('./serviceMongo');
+const serviceMongo = new ServiceMongo();
 
 class Controller {
 
     getAllUsers(req, res) {
         res.send(service.getAllUsers());
+
+        res.send(serviceMongo.getAllUsers());
     }
 
     getUser(req, res) {
         res.send(service.getUser(req, res));
+
+        res.send(serviceMongo.getUser(req, res));
     }
 
     addUser(req, res) {
         service.addUser(req, res);
+
+        serviceMongo.addUser(req, res);
     }
 
     updateUser(req,res){
         service.updateUser(req,res);
+
+        serviceMongo.updateUser(req,res);
     }
 
     deleteUser(req, res){
-        service.deleteUser(req,res)
+        service.deleteUser(req,res);
+
+        serviceMongo.deleteUser(req,res)
     }
 
 }

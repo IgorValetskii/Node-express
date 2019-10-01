@@ -15,10 +15,11 @@ async function start() {
     try {
         await mongoose.connect('mongodb+srv://Igor:1q2w3e4r@cluster0-cmtpz.mongodb.net/users', {
             useNewUrlParser: true,
-            useFindAndModify: false
+            useFindAndModify: false,
+            useUnifiedTopology: true
         });
 
-        app.listen(3000, function () {
+        app.listen(3000,  () => {
             console.log('Example app listening on port 3000!');
         });
     }catch (e) {
@@ -40,6 +41,32 @@ async function start() {
 // app.use(router);
 
 start();
+
+const userSchema = new mongoose.Schema({
+    name: String,
+    id: Number
+});
+
+
+const User = mongoose.model('user', userSchema);
+
+const newUser = new User({name: 'vasya', id:22});
+console.log(newUser);
+newUser.save(e => {
+    if (e) return console.error(e);
+});
+
+// const petya = new User({name:'petya', id:33});
+// petya.save((err,petya) =>{
+//     if (err) return console.error(err);
+//     console.log(petya);
+// });
+// db.use()
+// db.users.insertOne({
+//     "name" : "rocky",
+//     "id" : 33
+// });
+
 
 
 
