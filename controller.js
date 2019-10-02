@@ -7,31 +7,34 @@ const serviceMongo = new ServiceMongo();
 class Controller {
 
     getAllUsers(req, res) {
-        res.send(service.getAllUsers());
+        // res.send(service.getAllUsers());
 
-        res.send(serviceMongo.getAllUsers());
+
+       serviceMongo.getAllUsers(req,res);
     }
 
     getUser(req, res) {
-        res.send(service.getUser(req, res));
+        // res.send(service.getUser(req, res));
 
-        res.send(serviceMongo.getUser(req, res));
+        serviceMongo.getUser(req, res);
     }
 
     addUser(req, res) {
-        service.addUser(req, res);
+
+        // service.addUser(req, res);
 
         serviceMongo.addUser(req, res);
     }
 
     updateUser(req,res){
-        service.updateUser(req,res);
+
+        // service.updateUser(req,res);
 
         serviceMongo.updateUser(req,res);
     }
 
     deleteUser(req, res){
-        service.deleteUser(req,res);
+        // service.deleteUser(req,res);
 
         serviceMongo.deleteUser(req,res)
     }

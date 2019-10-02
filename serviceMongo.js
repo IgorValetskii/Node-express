@@ -1,46 +1,49 @@
 const fs = require('fs');
+const mongoose = require('mongoose');
 
 class ServiceMongo {
     constructor() {
-        this.users = JSON.parse(fs.readFileSync('./usersData.json', 'utf8'));
+        this.userSchema = new mongoose.Schema({
+            name: String,
+            id: Number
+        });
+
+        this.User = mongoose.model('User', this.userSchema);
     }
 
-    getAllUsers() {
-        return this.users;
+    getAllUsers(req,res) {
+
+        const a = async b => {
+
+            res.send(await this.User.find({}, (err) => {
+                if (err) return console.log(err);
+            }));
+        };
+        a();
     }
 
     getUser(req, res) {
-        const user = this.users.find(c => c.id === JSON.parse(req.params.id));
-        if (!user) {
-            res.status(404).send('The user with the given ID was not found')
-        }
-        return user;
+        const a = async b =>{
+
+            res.send(await this.User.find({id : `${JSON.parse(req.params.id)}`}, (err) => {
+                if(err) return console.log(err);
+            }))
+        };
+        a();
+
     }
 
     addUser(req, res) {
-        console.log(req.body);
-        const id = Math.floor (Math.random() * 1000);
-        const user = {};
-        user.id = id;
-        // user.id = shortid.generate();
-        user.name = req.body.name;
+        const a = async b => {
 
-        this.users.push(user);
-        this.updateJSONFile(this.users, res);
-    }
+            const name = req.body.name;
+            const id = Math.floor (Math.random() * 1000);
+            const user = new this.User({name : `${name}`, id : `${id}`});
 
-    deleteUser(req,res){
-
-        const user = this.users.find(c => c.id === JSON.parse(req.params.id));
-        if(user){
-            const indexOfUser = this.users.findIndex(el => el.id === JSON.parse(req.params.id));
-            this.users.splice(indexOfUser,1);
-            this.updateJSONFile(this.users, res);
-        }
-
-        else{
-            res.status(404).send('The user with the given ID was not found')
-        }
+            user.save();
+            res.send(user);
+        };
+        a();
     }
 
     updateUser(req,res){
@@ -52,6 +55,16 @@ class ServiceMongo {
         });
         this.updateJSONFile(this.users,res)
     }
+
+
+    deleteUser(req,res){
+
+            const user = this.User.findOneAndDelete({id: `${JSON.parse(req.params.id)}`}, (err,doc) =>{
+                if(err) return console.log(err);
+                res.send(doc);
+            });
+    }
+
 
     updateJSONFile(users, res) {
         fs.writeFile('./usersData.json', JSON.stringify(users), err => {
