@@ -11,68 +11,68 @@ class ServiceMongo {
         this.User = mongoose.model('User', this.userSchema);
     }
 
-    getAllUsers(req,res) {
+    async getAllUsers(req, res) {
+        try {
+            res.send(await this.User.find({}));
 
-        const a = async b => {
+        } catch (e) {
+            res.status(404).send(e.message)
+        }
+    }
 
-            res.send(await this.User.find({}, (err) => {
+    async getUser(req, res) {
+        try {
+            res.send(await this.User.find({id: `${JSON.parse(req.params.id)}`}, (err) => {
                 if (err) return console.log(err);
-            }));
-        };
-        a();
-    }
-
-    getUser(req, res) {
-        const a = async b =>{
-
-            res.send(await this.User.find({id : `${JSON.parse(req.params.id)}`}, (err) => {
-                if(err) return console.log(err);
             }))
-        };
-        a();
+
+        } catch (e) {
+            res.status(404).send(e.message)
+        }
 
     }
 
-    addUser(req, res) {
-        const a = async b => {
-
+    async addUser(req, res) {
+        try {
             const name = req.body.name;
-            const id = Math.floor (Math.random() * 1000);
-            const user = new this.User({name : `${name}`, id : `${id}`});
+            const id = Math.floor(Math.random() * 1000);
+            const user = await new this.User({name: `${name}`, id: `${id}`});
 
             user.save();
             res.send(user);
-        };
-        a();
-    }
 
-    updateUser(req,res){
-
-        this.users.map(el =>{
-            if(el.id === req.body.id) {
-                el.name = req.body.name;
-            }
-        });
-        this.updateJSONFile(this.users,res)
-    }
-
-
-    deleteUser(req,res){
-
-            const user = this.User.findOneAndDelete({id: `${JSON.parse(req.params.id)}`}, (err,doc) =>{
-                if(err) return console.log(err);
-                res.send(doc);
-            });
-    }
-
-
-    updateJSONFile(users, res) {
-        fs.writeFile('./usersData.json', JSON.stringify(users), err => {
-            if (err) return res.status(404).send(err);
-            res.send(users);
-        })
+        } catch (e) {
+            res.status(404).send(e.message)
+        }
 
     }
+
+    async updateUser(req, res) {
+        try {
+            const query = {'id': req.body.id};
+            const info = {'name': req.body.name};
+
+            this.User.findOneAndUpdate(query, info);
+            res.send(await this.User.find(query));
+
+        } catch (e) {
+            res.status(404).send(e.message)
+        }
+
+    }
+
+
+    async deleteUser(req, res) {
+        try {
+            res.send(await this.User.findOneAndDelete({id: `${JSON.parse(req.params.id)}`}, (err,doc) =>{
+                if (err) res.send(err);
+            }));
+        } catch (e) {
+            res.status(404).send(e.message)
+        }
+
+    }
+
 }
 
 module.exports = ServiceMongo;
